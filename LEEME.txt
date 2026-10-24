@@ -1,0 +1,8 @@
+SORPRESA DE CUMPLEAÑOS PARA CECY
+
+1. Coloca tu video MP4 en esta carpeta con el nombre exacto: cumple.mp4
+2. Sube index.html y cumple.mp4 a tu repositorio de GitHub.
+3. Activa GitHub Pages desde Settings > Pages > Deploy from a branch > main > /(root) > Save.
+4. Espera unos minutos y comparte el enlace que aparece en Settings > Pages.
+
+Nota: si el video pesa más de 25 MB, conviene alojarlo por separado (por ejemplo, Cloudinary) y reemplazar la URL en index.html. La página publicada será pública para quien tenga el enlace.

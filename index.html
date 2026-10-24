@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffd5e5">
+<title>Cecy, algo especial te espera 🎁</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#6c2446;text-align:center;
+    background:radial-gradient(ellipse at top,#fff5fa 0%,#ffd6e7 48%,#ffb8d3 100%);overflow-x:hidden}
+  .wrap{width:min(100%,520px);position:relative}
+  .eyebrow{letter-spacing:.12em;font-size:1rem;color:#a83367;font-weight:750}
+  h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1.08;margin:14px 0}
+  p{color:#713852;line-height:1.6}
+  .stage{height:280px;display:grid;place-items:center;perspective:900px;margin:12px 0}
+  .gift{position:relative;width:190px;height:160px;cursor:pointer;filter:drop-shadow(0 22px 22px #0005);animation:float 2.5s ease-in-out infinite}
+  .box{position:absolute;bottom:0;left:0;width:190px;height:115px;border-radius:8px 8px 14px 14px;
+    background:linear-gradient(135deg,#ff6b91,#d92e65);border:1px solid #ffb2c7}
+  .box:before{content:"";position:absolute;left:74px;top:0;width:40px;height:100%;background:#ffdf8a}
+  .lid{position:absolute;z-index:2;top:25px;left:-9px;width:208px;height:42px;border-radius:8px;
+    background:linear-gradient(135deg,#ff8cac,#ed4778);border:1px solid #ffc2d3;transform-origin:10% 90%;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+  .lid:before{content:"";position:absolute;left:83px;top:0;width:40px;height:100%;background:#ffdf8a}
+  .bow{position:absolute;z-index:3;top:0;left:72px;width:48px;height:34px}
+  .bow:before,.bow:after{content:"";position:absolute;width:28px;height:22px;border:8px solid #ffdf8a;border-radius:50% 50% 8px 50%}
+  .bow:before{left:-8px;transform:rotate(25deg)}.bow:after{left:20px;transform:scaleX(-1) rotate(25deg)}
+  .gift.open{animation:none}.gift.open .lid{transform:translate(-28px,-100px) rotate(-28deg)}
+  .gift.open{transform:translateY(15px);transition:transform .7s}
+  .gift.open .bow{opacity:0;transition:opacity .2s}
+  .sparkle{position:absolute;inset:0;pointer-events:none}
+  .sparkle span{position:absolute;color:#ffe6a0;font-size:22px;animation:twinkle 2s infinite}
+  .sparkle span:nth-child(1){top:20%;left:12%}.sparkle span:nth-child(2){top:35%;right:10%;animation-delay:.5s}
+  .sparkle span:nth-child(3){bottom:20%;left:18%;animation-delay:1s}.sparkle span:nth-child(4){bottom:25%;right:15%;animation-delay:.8s}
+  button{border:0;border-radius:999px;padding:15px 25px;font-size:1rem;font-weight:750;color:#321a36;background:linear-gradient(135deg,#ffe9a7,#f7c96d);
+    box-shadow:0 8px 24px #0003;cursor:pointer;transition:transform .2s}
+  button:hover{transform:translateY(-2px)}button:focus-visible{outline:3px solid white;outline-offset:4px}
+  .hint{font-size:.95rem;color:#87566e}
+  #videoPanel{display:none;margin-top:26px;animation:appear .8s ease both}
+  #videoPanel.show{display:block}
+  video{display:block;width:100%;max-height:70vh;background:#fff0f6;border-radius:14px;box-shadow:0 18px 48px #0005}
+  .message{font-size:1.1rem;color:#ffe7ad;font-weight:650}
+  .confetti{position:fixed;top:-20px;width:9px;height:14px;pointer-events:none;z-index:5;animation:fall 3s linear forwards}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  @keyframes twinkle{0%,100%{opacity:.3;transform:scale(.7)}50%{opacity:1;transform:scale(1.2)}}
+  @keyframes appear{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fall{to{transform:translateY(110vh) rotate(650deg);opacity:.9}}
+  @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="eyebrow">Cecy, algo especial te espera</div>
+  <h1>¡Tienes una sorpresa! 🎂</h1>
+  <p>Preparamos algo con mucho cariño para ti.<br>¿Te animas a descubrirlo?</p>
+  <div class="stage" id="stage">
+    <div class="sparkle" aria-hidden="true"><span>✦</span><span>✧</span><span>✦</span><span>✧</span></div>
+    <div class="gift" id="gift" role="img" aria-label="Caja de regalo rosa con cinta dorada">
+      <div class="lid"></div><div class="bow"></div><div class="box"></div>
+    </div>
+  </div>
+  <button id="openBtn">🌻 Ver mi video</button>
+  <p class="hint" id="hint">Toca el botón para descubrir tu sorpresa</p>
+  <section id="videoPanel">
+    <p class="message">¡Feliz cumpleaños! 🎁🎂</p>
+    <p>Este video es especialmente para ti, de todos los que te amamos.</p>
+    <video id="birthdayVideo" controls playsinline preload="metadata">
+      <source src="cumple.mp4" type="video/mp4">
+      Tu navegador no puede reproducir este video.
+    </video>
+    <p class="hint">Si el video no comienza, pulsa reproducir en el reproductor.</p>
+  </section>
+</main>
+<script>
+const btn=document.getElementById('openBtn');
+const gift=document.getElementById('gift');
+const panel=document.getElementById('videoPanel');
+const video=document.getElementById('birthdayVideo');
+let opened=false;
+btn.addEventListener('click',()=>{
+  if(opened){panel.scrollIntoView({behavior:'smooth',block:'start'});return}
+  opened=true;
+  gift.classList.add('open');
+  btn.textContent='🌻 Ver mi video';
+  document.getElementById('hint').textContent='¡Tu regalo está abierto!';
+  panel.classList.add('show');
+  for(let i=0;i<48;i++){
+    const c=document.createElement('i');c.className='confetti';
+    c.style.left=Math.random()*100+'vw';
+    c.style.background=['#ffdf8a','#ff6b91','#ff9fc5','#d5a6ff','#fff'][i%5];
+    c.style.animationDelay=Math.random()*.8+'s';
+    c.style.transform='rotate('+Math.random()*360+'deg)';
+    document.body.appendChild(c);setTimeout(()=>c.remove(),4000);
+  }
+  panel.scrollIntoView({behavior:'smooth',block:'start'});
+  video.play().catch(()=>{});
+});
+</script>
+</body>
+</html>
